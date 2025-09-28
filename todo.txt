@@ -1,0 +1,3 @@
+setup a VRAM subclass that can allow blocking. Maybe rethink how im doing blocking
+
+find a way to do logging better cause hot dang its bad
