@@ -10,7 +10,7 @@ class NoMapper(Cartridge):
         self.rom = romarray
 
     def read(self, addr):
-        return self.rom[byte]
+        return self.rom[addr]
 
     def write(self, addr, val):
         pass

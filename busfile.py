@@ -1,7 +1,7 @@
-from ramtypes import *
+import ramtypes
 import cartridge
 class Bus: # i am going to ignore cart ram for now, ill do it later
-    def __init__(self, bootrom, cart:cartridge.Cartridge, vram, wram, oam, hram):
+    def __init__(self, bootrom, cart:cartridge.Cartridge, vram:ramtypes.Ram, wram:ramtypes.Ram, oam:ramtypes:Ram, hram:ramtypes:Ram):
         self.bootrom = bootrom
         self.cart = cart
         self.vram = vram
@@ -17,6 +17,9 @@ class Bus: # i am going to ignore cart ram for now, ill do it later
         self.canWriteVram = 1
         self.canWriteOAM = 1
         self.IE = 0
+        self.ppu = 0
+    def loadPPU(self, ppu):
+        self.ppu = ppu
     def readByte(self, addr:int):
         if 0x0000 <= addr <= 0x7FFF:
             if addr <= 0xFF and self.bootromEnabled:
@@ -45,7 +48,7 @@ class Bus: # i am going to ignore cart ram for now, ill do it later
         elif 0xFF00 <= addr <= 0xFF7F:
             #io registers
             if addr == 0xFF40:
-                return ppu.busRead()
+                return self.ppu.busRead()
         elif 0xFF80 <= addr <= 0xFFFE:
             return self.hram.read(addr - 0xFF80)
         elif addr == 0xFFFF:
@@ -72,7 +75,7 @@ class Bus: # i am going to ignore cart ram for now, ill do it later
         elif 0xFF00 <= addr <= 0xFF7F:
             #io registers
             if addr == 0xFF40:
-                ppu.busWrite(val)
+                self.ppu.busWrite(val)
         elif 0xFF80 <= addr <= 0xFFFE:
             self.hram.write(addr - 0xFF80, val)
         elif addr == 0xFFFF:
