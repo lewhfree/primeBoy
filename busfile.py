@@ -1,7 +1,7 @@
 import ramtypes
 import cartridge
 class Bus: # i am going to ignore cart ram for now, ill do it later
-    def __init__(self, bootrom, cart:cartridge.Cartridge, vram:ramtypes.Ram, wram:ramtypes.Ram, oam:ramtypes:Ram, hram:ramtypes:Ram):
+    def __init__(self, bootrom, cart:cartridge.Cartridge, vram:ramtypes.Ram, wram:ramtypes.Ram, oam:ramtypes.Ram, hram:ramtypes.Ram):
         self.bootrom = bootrom
         self.cart = cart
         self.vram = vram
