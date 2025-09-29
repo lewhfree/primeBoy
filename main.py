@@ -3,7 +3,10 @@ import fileloader
 import cartridge
 import ramtypes
 import busfile
-
+import ppufile
+import pygame
+HEIGHT, WIDTH = 256, 256
+SCALE = 2
 bootrom = fileloader.loadBin('boot.bin')
 rom = fileloader.loadBin('tetris.gb')
 
@@ -15,7 +18,23 @@ oam  = ramtypes.Ram(0xA0)
 hram = ramtypes.Ram(0x7F)
 bus  = busfile.Bus(bootrom, cart, vram, wram, oam, hram)
 
+pygame.init()
+screen = pygame.display.set_mode((WIDTH * SCALE, HEIGHT * SCALE))
+pygame.display.set_caption("PrimeBoy Display")
+
+framebuffer = ppufile.FB()
+ppu = ppufile.PPU(bus, framebuffer)
+
+
+for x in range(256):
+    for y in range(256):
+        ppu.fb.writePixel(x, y, (x*y) % 4)
+
+
+ppufile.drawFB(framebuffer, screen, 0, 0)
 # class CPU: #in charge of all the alu idu clock
+while 1:
+    pass
 
     
 # class PPU:

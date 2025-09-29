@@ -42,6 +42,10 @@ class Bus: # i am going to ignore cart ram for now, ill do it later
         elif 0xFEA0 <= addr <= 0xFEFF:
             return 0xFF
             #borked
+        elif 0xFF00 <= addr <= 0xFF7F:
+            #io registers
+            if addr == 0xFF40:
+                return ppu.busRead()
         elif 0xFF80 <= addr <= 0xFFFE:
             return self.hram.read(addr - 0xFF80)
         elif addr == 0xFFFF:
@@ -65,6 +69,10 @@ class Bus: # i am going to ignore cart ram for now, ill do it later
                 self.oam.write(addr - 0xFE00, val)
         elif 0xFEA0 <= addr <= 0xFEFF:
             pass
+        elif 0xFF00 <= addr <= 0xFF7F:
+            #io registers
+            if addr == 0xFF40:
+                ppu.busWrite(val)
         elif 0xFF80 <= addr <= 0xFFFE:
             self.hram.write(addr - 0xFF80, val)
         elif addr == 0xFFFF:
