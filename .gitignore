@@ -3,3 +3,4 @@ micropython
 .ruff_cache/
 tetris.gb
 boot.bin
+todo.txt

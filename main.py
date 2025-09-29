@@ -28,7 +28,8 @@ pygame.display.set_caption("PrimeBoy Display")
 framebuffer = framebufferfile.FB()
 ppu = ppufile.PPU(bus, framebuffer, intcaller)
 
-bus.loadPPU(ppu)
+bus.loadPPU(ppu) # I need to do this because the bus calls ppu functions to pass on r/w to it
+                 # I will probably have to do the same thing for the rest of the peripherals.
 
 for x in range(256):
     for y in range(256):
@@ -38,7 +39,7 @@ for x in range(256):
 framebuffer.drawFB(screen)
 # class CPU: #in charge of all the alu idu clock
 while 1:
-    pass
+    ppu.step(1)
 
     
 # class APU: #haha no

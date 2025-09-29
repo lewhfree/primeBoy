@@ -1,0 +1,2 @@
+implement DMA OAM tansfer. When cpu writes to the register, capture it and just do it instantly.
+I don't really care about accuracy here, just results.

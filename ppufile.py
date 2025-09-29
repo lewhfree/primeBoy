@@ -1,5 +1,6 @@
+import busfile
 class PPU:
-    def __init__(self, bus, fb, intcaller):
+    def __init__(self, bus:busfile.Bus, fb, intcaller):
         self.bus = bus
         self.fb = fb
         self.intcaller = intcaller
@@ -31,16 +32,28 @@ class PPU:
             self.dots += 1
             mode = self.stat & 0b11
 
-            if mode == 2: # OAM objects on current line
+            if mode == 2: # OAM objects on current line, only oam blocked
+                self.bus.canReadOAM = 0
+                self.bus.canWriteOAM = 0
+                self.bus.canReadVram = 1 
+                self.bus.canWriteVram = 1
                 if self.dots >= 80:
                     self.stat = (self.stat & 0b11111100) | 3
             elif mode == 3: # pixels to screen
+                self.bus.canReadOAM = 0
+                self.bus.canWriteOAM = 0
+                self.bus.canReadVram = 0 
+                self.bus.canWriteVram = 0
                 if self.dots >= 252:
                     self.stat &= 0b11111100
                     if self.stat & 0b00001000:
                         self.intcaller.callInt(0x48)
                     self.renderLine()
             elif mode == 0: # Hblank
+                self.bus.canReadOAM = 1
+                self.bus.canWriteOAM = 1
+                self.bus.canReadVram = 1 
+                self.bus.canWriteVram = 1
                 if self.dots >= 456:
                     self.dots = 0
                     self.ly += 1
@@ -55,7 +68,11 @@ class PPU:
                         if self.stat & 0b00100000:
                             self.intcaller.callInt(0x48)
                     self.isLYCeqLY()
-            elif mode == 1:
+            elif mode == 1: #VBLANK!!! WOW
+                self.bus.canReadOAM = 1
+                self.bus.canWriteOAM = 1
+                self.bus.canReadVram = 1 
+                self.bus.canWriteVram = 1
                 if self.dots >= 456:
                     self.dots = 0
                     self.ly += 1
